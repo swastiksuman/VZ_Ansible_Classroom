@@ -1,0 +1,8 @@
+---
+- hosts: machines
+  tasks:
+  - name: Print main
+    debug:
+     msg: "This is main module"
+  - include: sub_task.yaml
+ 

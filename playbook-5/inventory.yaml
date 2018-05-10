@@ -1,0 +1,5 @@
+[machines]
+10.76.118.59 ansible_ssh_user=root ansible_ssh_pass=root
+localhost ansible_ssh_user=root ansible_ssh_pass=root
+[test-machines]
+test

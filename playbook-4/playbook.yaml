@@ -1,0 +1,34 @@
+---
+- hosts: machines
+  sudo: yes
+  vars:
+    http_port: 80
+    doc_dir: /ansible/
+    doc_root: /var/www/html
+    max_clients: 5
+    company: Test
+
+  vars_prompt:
+    - name: username
+      prompt:  What is your name?
+      private: yes
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name=httpd state=present
+    when: ansible_os_family == "CentOS"
+
+  - name: Start Apache Services
+    service: name=httpd enabled=yes state=started
+
+  - name: Deploy configuration File
+    template: src=templates/httpd.j2 dest=/etc/httpd/conf/httpd.conf
+    notify:
+      - Restart Apache
+
+  - name: Copy Site Files
+    template: src=templates/index.j2 dest={{ doc_root }}/index.html
+
+  handlers:
+     - name: Restart Apache
+       service: name=httpd state=restarted

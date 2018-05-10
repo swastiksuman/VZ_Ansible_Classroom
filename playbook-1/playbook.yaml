@@ -1,0 +1,26 @@
+---
+- hosts: machines
+  vars:
+   company: 'IT LEGAL'
+  pre_tasks:
+  - setup: 
+  tasks:
+  - name: run apache in localhost
+    yum: pkg={{ item }} state=installed
+    with_items:
+    - git
+    - ntp
+    - vim      
+  - name: deploy index.html
+    template:
+     src="index.j2"
+     dest="/var/www/html/index.html"
+  - name: starting apache
+    service:
+     name: httpd
+     state: started
+  - name: Creating a file
+    file: path=/opt/verizon.txt state=touch
+    when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_version == "7.4.1708"
